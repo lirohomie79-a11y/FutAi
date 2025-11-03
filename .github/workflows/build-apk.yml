@@ -1,7 +1,9 @@
-name: Build APK
+name: Build LuckyAI APK
 
 on:
   push:
+    branches: [ main ]
+  pull_request:
     branches: [ main ]
 
 jobs:
@@ -10,22 +12,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: 📥 Clonar o código
         uses: actions/checkout@v3
 
-      - name: Set up JDK 17
+      - name: ⚙️ Configurar JDK
         uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'
           java-version: 17
+          distribution: temurin
 
-      - name: Build APK
-        run: |
-          cd android
-          ./gradlew assembleRelease
+      - name: 🔧 Permitir execução do Gradle
+        run: chmod +x gradlew
 
-      - name: Upload APK
+      - name: 🏗️ Construir APK (modo release)
+        run: ./gradlew assembleRelease
+
+      - name: 📦 Fazer upload do APK gerado
         uses: actions/upload-artifact@v3
         with:
-          name: app-release.apk
-          path: android/app/build/outputs/apk/release/app-release.apk
+          name: LuckyAI-APK
+          path: app/build/outputs/apk/release/app-release.apk
